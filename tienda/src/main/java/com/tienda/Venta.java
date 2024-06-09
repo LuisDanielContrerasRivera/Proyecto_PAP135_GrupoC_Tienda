@@ -58,4 +58,16 @@ public class Venta {
     public double getTotal() {
         return total;
     }
+    /**
+     * @description Actualiza el total de la venta
+     * @param total
+     */
+    public void setTotal(double total) {
+        this.total = total;
+    }
+    @Override
+    public String toString() {
+        return "Venta [productos: " + productos + ", cantidades: " + cantidades + ", " + cliente + ", total: "
+                + total + "]";
+    }
 }

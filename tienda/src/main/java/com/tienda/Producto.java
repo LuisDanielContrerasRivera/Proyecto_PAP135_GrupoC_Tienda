@@ -51,4 +51,12 @@ public class Producto {
     public int getStock() {
         return stock;
     }
+    /**
+     * @description Devuelve el producto con sus propiedades
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "Producto [nombre: " + nombre + ", precio: " + precio + ", stock: " + stock + "]";
+    }
 }

@@ -36,4 +36,12 @@ public class Cliente {
     public String getDireccion() {
         return direccion;
     }
+    /**
+     * @description Devuelve el cliente con todas sus propiedades
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "Cliente [nombre: " + nombre + ", telefono: " + telefono + ", direccion: " + direccion + "]";
+    }
 }

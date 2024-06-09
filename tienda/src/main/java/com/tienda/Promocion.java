@@ -37,4 +37,12 @@ public class Promocion {
     public double getPorcentajeDescuento() {
         return porcentajeDescuento;
     }
+    /**
+     * @description Devuelve la promoción con todas sus propiedades
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "Promocion [montoCompraMinima: " + montoCompraMinima + ", porcentajeDescuento: " + porcentajeDescuento + "]";
+    }
 }
