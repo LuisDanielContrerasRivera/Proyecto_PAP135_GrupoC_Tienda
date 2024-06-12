@@ -1,27 +1,32 @@
 package com.tienda;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
     private Tienda tienda = new Tienda();
     /**
-     * @description 
+     * @description Dispara el menu de la aplicación
      */
     public void ejecutarMenu() {
         Scanner scanner = new Scanner(System.in);
         Boolean continuar = true;
-
+        
         while (continuar) {
             mostrarMenu();
             System.out.println("Seleccione una opción: ");
-            int opcion = scanner.nextInt();
-            if (opcion == 8) { break; }
-            scanner.nextLine();
-
-            ejecutarOpcion(opcion, scanner);
-            continuar = mostrarContinuar(scanner);
+            try {
+                int opcion = scanner.nextInt();
+                scanner.nextLine();
+                
+                if (opcion == 8) { break; }
+                ejecutarOpcion(opcion, scanner);
+                continuar = mostrarContinuar(scanner);
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+            }
         }
 
         limpiarConsola();
@@ -83,7 +88,7 @@ public class Menu {
         System.out.flush();
     }
     /**
-     * @description
+     * @description Ejecuta los metodos en funcion de la opción seleccionada
      * @param opcion
      * @param scanner
      */
@@ -126,20 +131,38 @@ public class Menu {
         }
     }
     /**
-     * @description
+     * @description Guia al usuario en la creación de un producto
      * @param scanner
      */
     private void crearProducto(Scanner scanner) {
+        String nombre;
+        double precio = 0;
+        int stock = 0;
+
         System.out.println("Ingrese el Nombre: ");
-        String nombre = scanner.nextLine();
+        nombre = scanner.nextLine();
 
-        System.out.println("Ingrese el Precio: ");
-        double precio = scanner.nextDouble();
-
-        System.out.println("Ingrese el stock: ");
-        int stock = scanner.nextInt();
-        scanner.nextLine();
-
+        while (true) {
+            try {
+                System.out.println("Ingrese el Precio: ");
+                precio = scanner.nextDouble();
+                break;
+            } catch (InputMismatchException  e) {
+                System.out.println("Precio no válido. Por favor, ingrese un número válido.");
+                scanner.nextLine();
+            }
+        }
+        while (true) {
+            try {
+                System.out.println("Ingrese el stock: ");
+                stock = scanner.nextInt();
+                scanner.nextLine();
+                break;
+            } catch (InputMismatchException  e) {
+                System.out.println("Stock no válido. Por favor, ingrese un número válido.");
+                scanner.nextLine();
+            }
+        }
         Producto producto = new Producto(nombre, precio, stock);
 
         tienda.registrarProducto(producto);
@@ -150,7 +173,7 @@ public class Menu {
         System.out.println(producto.toString());
     }
     /**
-     * @description
+     * @description Guia al usuario en la creación de un cliente
      * @param scanner
      */
     private void crearCliente(Scanner scanner) {
@@ -172,16 +195,33 @@ public class Menu {
         System.out.println(cliente.toString());
     }
     /**
-     * @description
+     * @description Guia al usuario en la creación de una promoción
      * @param scanner
      */
     private void crearPromocion(Scanner scanner) {
-        System.out.println("Ingrese el Monto de Compra Minima: ");
-        double montoCompraMinima = scanner.nextDouble();
+        double montoCompraMinima = 0;
+        double porcentajeDescuento = 0;
 
-        System.out.println("Ingrese el Porcentaje de Descuento: ");
-        double porcentajeDescuento = scanner.nextDouble();
-
+        while (true) {
+            try {
+                System.out.println("Ingrese el Monto de Compra Minima: ");
+                montoCompraMinima = scanner.nextDouble();
+                break;
+            } catch (InputMismatchException  e) {
+                System.out.println("Monto de compra minima no válido. Por favor, ingrese un número válido.");
+                scanner.nextLine();
+            }
+        }
+        while (true) {
+            try {
+                System.out.println("Ingrese el Porcentaje de Descuento: ");
+                porcentajeDescuento = scanner.nextDouble();
+                break;
+            } catch (InputMismatchException  e) {
+                System.out.println("Porcentaje de descuento no válido. Por favor, ingrese un número válido.");
+                scanner.nextLine();
+            }
+        }
         Promocion promocion = new Promocion(montoCompraMinima, porcentajeDescuento);
 
         tienda.registrarPromocion(promocion);
@@ -191,10 +231,14 @@ public class Menu {
         System.out.println(promocion.toString());
     }
     /**
-     * @description
+     * @description Guia al usuario en la creación de una venta
      * @param scanner
      */
     private void realizarVenta(Scanner scanner) {
+        if (tienda.getClientes().size() == 0 || tienda.getInventario().size() == 0) {
+            System.out.println("No hay datos de clientes y/o productos. Favor ingresarlos antes.");
+            return;
+        }
         List<Producto> productosVendidos = new ArrayList<>();
         List<Integer> cantidadesVendidas = new ArrayList<>();
 
@@ -247,5 +291,5 @@ public class Menu {
 
             tienda.realizarVenta(productosVendidos, cantidadesVendidas, cliente, promocion);
         }
-    }    
+    }     
 }
